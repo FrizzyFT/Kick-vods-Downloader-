@@ -3,29 +3,31 @@ name: Kick VOD Downloader
 on:
 workflow_dispatch:
 inputs:
-vod_link:
-description: "Paste the Kick VOD link here"
+vod_url:
+description: "Paste the full Kick VOD link"
 required: true
-type: string
+default: ""
 
 jobs:
 download:
 runs-on: ubuntu-latest
+
 steps:
 - name: Checkout repo
 uses: actions/checkout@v3
 
 - name: Install yt-dlp
 run: |
-python3 -m pip install --upgrade pip
+sudo apt update
+sudo apt install -y python3-pip
 pip install yt-dlp
 
-- name: Download VOD
+- name: Download Kick VOD
 run: |
-yt-dlp "${{ github.event.inputs.vod_link }}" -o "vod.mp4"
+yt-dlp "${{ github.event.inputs.vod_url }}" -o "kick_vod.mp4"
 
-- name: Upload VOD as Artifact
+- name: Upload as Artifact
 uses: actions/upload-artifact@v3
 with:
-name: kick-vod
-path: vod.mp4
+name: kick_vod
+path: kick_vod.mp4
