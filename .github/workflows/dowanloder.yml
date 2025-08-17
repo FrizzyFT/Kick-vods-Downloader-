@@ -1,28 +1,36 @@
-name: Kick VOD Downloader
+# This is a basic workflow to help you get started with Actions
 
+name: CI
+
+# Controls when the workflow will run
 on:
-workflow_dispatch:
-inputs:
-vod_url:
-description: 'Kick VOD link'
-required: true
-default: 'https://kick.com/video/example'
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-download:
-runs-on: ubuntu-latest
-steps:
-- name: Set up environment
-run: sudo apt-get update && sudo apt-get install -y ffmpeg python3 python3-pip
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
 
-- name: Install yt-dlp
-run: pip3 install yt-dlp
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
 
-- name: Download VOD
-run: yt-dlp "${{ github.event.inputs.vod_url }}" -o "kick_vod.mp4"
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
 
-- name: Upload as artifact
-uses: actions/upload-artifact@v3
-with:
-name: kick_vod
-path: kick_vod.mp4
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
